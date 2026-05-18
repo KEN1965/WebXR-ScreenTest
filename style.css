@@ -118,6 +118,9 @@ body[data-floor-detected="true"] #guide {
 body[data-ar-started="true"] #ui {
   display: block;
 }
+body[data-ar-started="true"] #xr-canvas {
+  display: block;
+}
 /* portrait:撮影ボタンを画面中央下部に配置 */
 body[data-screen-orientation="portrait"] #capture-btn {
   position: fixed;
@@ -159,4 +162,7 @@ body[data-screen-orientation="landscape"] #debug-orientation {
 
   /*canvasがAR開始ボタンのタップを邪魔しないようにする */
   pointer-events: none;
+
+  /*AR開始前は非表示 */
+  display: none;
 }

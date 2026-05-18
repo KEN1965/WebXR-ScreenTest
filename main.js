@@ -101,8 +101,8 @@ startButton.addEventListener("click", async () => {
       "immersive-ar",
       {
         //hit-test
-        requiredFeatures: ["hit-test"],
-        optionalFeatures: ["dom-overlay"],
+        // requiredFeatures: ["hit-test"],
+        optionalFeatures: ["hit-test","dom-overlay"],
 
         domOverlay: {
           root: ui
@@ -113,15 +113,10 @@ startButton.addEventListener("click", async () => {
     console.log("AR開始", session);
 
     xrSession = session;
-    // AR開始後の状態にする
-    document.body.dataset.arStarted = "true";
+  
 
     //webglをwebxrで使える状態にする
     await gl.makeXRCompatible();
-
-    // AR開始ボタンを非表示にする
-    startButton.style.display = "none";
-    versionLabel.style.display = "none";
 
     //webxrの描出レイヤーを作成する
     session.updateRenderState({
@@ -145,12 +140,17 @@ startButton.addEventListener("click", async () => {
     //webxrの描画ループ開始
     session.requestAnimationFrame(onXRFrame);
 
+      // AR開始後の状態にする
+    document.body.dataset.arStarted = "true";
+    // AR開始ボタンを非表示にする
+    startButton.style.display = "none";
+    versionLabel.style.display = "none";
 
   } catch (error) {
 
     console.error(error);
 
-    alert("AR開始失敗");
+    alert(`AR開始失敗: ${error.name}\n${error.message}`);
   }
 });
 
