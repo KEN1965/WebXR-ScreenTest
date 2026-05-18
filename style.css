@@ -73,51 +73,25 @@ body {
   z-index: 999;
 }
 
-/* portrait */
-body[data-screen-orientation="portrait"] #menu-btn {
-
-  position: absolute;
-
-  top: 24px;
-  left: 24px;
-}
-
-body[data-screen-orientation="portrait"] #right-buttons {
-
-  position: absolute;
-
-  right: 24px;
-  bottom: 40px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* landscape */
-body[data-screen-orientation="landscape"] #menu-btn {
-
+/* portrait:撮影ボタンを画面中央下部に配置 */
+body[data-screen-orientation="portrait"] #capture-btn {
   position: absolute;
 
   left: 50%;
-  bottom: 24px
+  bottom: 40px;
 
-  transform: translateY(-50%) rotate(90deg);
+  transform: translateX(-50%);
 }
-
-body[data-screen-orientation="landscape"] #right-buttons {
-
+/* landscape ：縦画面と同じ位置に置き、文字を横向きに補正*/
+body[data-screen-orientation="landscape"] #capture-btn {
   position: absolute;
 
-  right: 24px;
-  top: 50%;
+  left: 50%;
+  bottom: 40px;
 
-  transform: translateY(-50%) rotate(90deg);
-
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
+  transform: translateX(-50%) rotate(90deg);
 }
+
 body[data-screen-orientation="landscape"] #debug-orientation {
   left: 24px;
   top: 50%;
