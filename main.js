@@ -1,136 +1,102 @@
-const startButton = document.querySelector("#start-ar");
-const closeButton = document.querySelector("#close-ar");
-const statusText = document.querySelector("#status");
-const xrUi = document.querySelector("#xr-ui");
-const orientationLabel = document.querySelector("#orientation-label");
+// HTML要素取得
+const startButton = document.getElementById("start-ar");
+const ui = document.getElementById("ui");
+const debug = document.getElementById("debug-orientation");
 
-let xrSession = null;
-let gl = null;
-let lastOrientation = "unknown";
+// 現在の向き
+let currentOrientation = null;
 
-function setStatus(message) {
-  statusText.textContent = message;
-}
+// UI向きをセット
+function setScreenOrientation(orientation) {
 
-function getScreenOrientation() {
-  // WebXR中は CSS の @media (orientation) が期待通り更新されない端末があるため、
-  // screen.orientation / window.orientation / viewport size の順で実画面の向きを判定する。
-  const screenType = screen.orientation?.type || "";
-  if (screenType.includes("landscape")) return "landscape";
-  if (screenType.includes("portrait")) return "portrait";
+  if (currentOrientation === orientation) return;
 
-  if (typeof window.orientation === "number") {
-    return Math.abs(window.orientation) === 90 ? "landscape" : "portrait";
-  }
+  currentOrientation = orientation;
 
-  const viewport = window.visualViewport;
-  const width = viewport?.width || window.innerWidth;
-  const height = viewport?.height || window.innerHeight;
-  return width > height ? "landscape" : "portrait";
-}
-
-function applyOrientationLayout() {
-  const orientation = getScreenOrientation();
+  // body属性変更
   document.body.dataset.screenOrientation = orientation;
 
-  const viewport = window.visualViewport;
-  const width = Math.round(viewport?.width || window.innerWidth);
-  const height = Math.round(viewport?.height || window.innerHeight);
-  const angle = screen.orientation?.angle ?? window.orientation ?? "-";
+  // デバッグ表示更新
+  debug.textContent = orientation;
 
-  orientationLabel.textContent = `${orientation} / ${width}x${height} / angle:${angle}`;
-  lastOrientation = orientation;
+  console.log("screen orientation:", orientation);
 }
 
-async function init() {
-  applyOrientationLayout();
+// 通常ブラウザ判定
+function updateOrientationByScreenSize() {
 
-  window.addEventListener("resize", applyOrientationLayout);
-  window.visualViewport?.addEventListener("resize", applyOrientationLayout);
-  screen.orientation?.addEventListener?.("change", applyOrientationLayout);
-  window.addEventListener("orientationchange", () => {
-    // Android Chromeでは回転直後に値が遅れて更新されることがある。
-    applyOrientationLayout();
-    setTimeout(applyOrientationLayout, 300);
-  });
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
-  if (!("xr" in navigator)) {
-    setStatus("このブラウザは WebXR に対応していません。");
-    startButton.disabled = true;
+  if (width > height) {
+    setScreenOrientation("landscape");
+  } else {
+    setScreenOrientation("portrait");
+  }
+}
+
+// スマホセンサー判定
+function handleDeviceOrientation(event) {
+
+  const gamma = event.gamma;
+  const beta = event.beta;
+
+  if (gamma === null || beta === null) return;
+
+  const isLandscape = Math.abs(gamma) > 45;
+
+  if (isLandscape) {
+    setScreenOrientation("landscape");
+  } else {
+    setScreenOrientation("portrait");
+  }
+}
+
+// 初期化
+updateOrientationByScreenSize();
+
+// 画面サイズ変化
+window.addEventListener(
+  "resize",
+  updateOrientationByScreenSize
+);
+
+// センサーイベント
+window.addEventListener(
+  "deviceorientation",
+  handleDeviceOrientation
+);
+
+// AR開始
+startButton.addEventListener("click", async () => {
+
+  if (!navigator.xr) {
+    alert("WebXR未対応です");
     return;
   }
 
-  const supported = await navigator.xr.isSessionSupported("immersive-ar");
-  if (!supported) {
-    setStatus("immersive-ar が利用できません。Android Chrome + ARCore 対応端末で確認してください。");
-    startButton.disabled = true;
-    return;
-  }
-
-  setStatus("WebXR AR を開始できます。");
-}
-
-async function startAR() {
   try {
-    xrSession = await navigator.xr.requestSession("immersive-ar", {
-      requiredFeatures: ["local"],
-      optionalFeatures: ["dom-overlay"],
-      domOverlay: { root: xrUi },
-    });
 
-    xrSession.addEventListener("end", onSessionEnded);
+    const session = await navigator.xr.requestSession(
+      "immersive-ar",
+      {
 
-    xrUi.classList.remove("hidden");
-    applyOrientationLayout();
+        optionalFeatures: ["dom-overlay"],
 
-    const canvas = document.createElement("canvas");
-    gl = canvas.getContext("webgl", { xrCompatible: true, alpha: true });
+        domOverlay: {
+          root: ui
+        }
+      }
+    );
 
-    await xrSession.updateRenderState({
-      baseLayer: new XRWebGLLayer(xrSession, gl),
-    });
+    console.log("AR開始", session);
 
-    const referenceSpace = await xrSession.requestReferenceSpace("local");
-    xrSession.requestAnimationFrame((time, frame) => onXRFrame(time, frame, referenceSpace));
+    updateOrientationByScreenSize();
+
   } catch (error) {
+
     console.error(error);
-    setStatus(`AR開始に失敗しました: ${error.message}`);
+
+    alert("AR開始失敗");
   }
-}
-
-function onXRFrame(time, frame, referenceSpace) {
-  const session = frame.session;
-  session.requestAnimationFrame((t, f) => onXRFrame(t, f, referenceSpace));
-
-  // WebXRセッション中にも定期的に向きを確認する。
-  const currentOrientation = getScreenOrientation();
-  if (currentOrientation !== lastOrientation) {
-    applyOrientationLayout();
-  }
-
-  const pose = frame.getViewerPose(referenceSpace);
-  if (!pose) return;
-
-  gl.bindFramebuffer(gl.FRAMEBUFFER, session.renderState.baseLayer.framebuffer);
-  gl.clearColor(0, 0, 0, 0);
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-}
-
-function onSessionEnded() {
-  xrSession = null;
-  xrUi.classList.add("hidden");
-  setStatus("ARを終了しました。");
-}
-
-startButton.addEventListener("click", startAR);
-closeButton.addEventListener("click", () => xrSession?.end());
-
-document.querySelector("#primary-action").addEventListener("click", () => {
-  console.log("撮影", document.body.dataset.screenOrientation);
 });
-
-document.querySelector("#secondary-action").addEventListener("click", () => {
-  console.log("メニュー", document.body.dataset.screenOrientation);
-});
-
-init();

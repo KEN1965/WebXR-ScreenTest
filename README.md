@@ -1,26 +1,15 @@
-# WebXR Screen Test v2
+# WebXR Screen Test
 
-Android Chrome の WebXR AR で、スマホの縦横を自動判定してUI配置を切り替えるサンプルです。
+Android Chrome向けのWebXR UI切り替えサンプルです。
 
-## 変更点
+## 機能
 
-- 「切替」ボタンで向きを変える仕様ではありません。
-- `screen.orientation` / `window.orientation` / viewport サイズから自動判定します。
-- `body[data-screen-orientation="portrait"]` と `body[data-screen-orientation="landscape"]` でCSSを切り替えます。
-- ボタン名を「切替」から「メニュー」に変更しました。
+- WebXR immersive-ar
+- DOM Overlay UI
+- portrait / landscape 自動切替
+- deviceorientation 使用
 
-## GitHub Pages
+## 起動方法
 
-リポジトリ直下に以下を置いてください。
-
-- index.html
-- style.css
-- main.js
-- README.md
-
-Settings > Pages > Deploy from a branch > main / root を選択すると公開できます。
-
-## 確認ポイント
-
-AR開始後、スマホを縦・横に回転すると、右上の表示が `portrait` / `landscape` に変わります。
-変われば、CSSのレイアウトも自動で切り替わっています。
+HTTPS環境で公開してください。
+GitHub Pages推奨。

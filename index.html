@@ -1,31 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WebXR Screen Test</title>
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body data-screen-orientation="unknown">
-  <main id="fallback">
-    <h1>WebXR Screen Test</h1>
-    <p>Android Chrome で開き、「ARを開始」を押してください。</p>
-    <p class="note">WebXR AR は HTTPS または localhost が必要です。</p>
-    <button id="start-ar">ARを開始</button>
-    <p id="status">初期化中...</p>
-  </main>
+<body>
 
-  <!-- DOM Overlay: WebXR中に画面上へ重ねるUI -->
-  <div id="xr-ui" class="hidden">
-    <div id="top-bar">
-      <button id="close-ar" type="button">終了</button>
-      <span id="orientation-label">orientation: -</span>
+  <!-- WebXR開始ボタン -->
+  <button id="start-ar">
+    AR開始
+  </button>
+
+  <!-- WebXR DOM Overlay UI -->
+  <div id="ui">
+
+    <!-- 左側ボタン -->
+    <button id="menu-btn">
+      メニュー
+    </button>
+
+    <!-- 右側ボタン群 -->
+    <div id="right-buttons">
+
+      <button id="capture-btn">
+        撮影
+      </button>
+
+      <button id="save-btn">
+        保存
+      </button>
+
     </div>
 
-    <button id="primary-action" type="button">撮影</button>
-    <button id="secondary-action" type="button">メニュー</button>
+    <!-- デバッグ表示 -->
+    <div id="debug-orientation">
+      orientation
+    </div>
+
   </div>
 
-  <script type="module" src="./main.js"></script>
+  <script type="module" src="main.js"></script>
+
 </body>
 </html>
