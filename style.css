@@ -79,9 +79,6 @@ body {
   text-align: center;
 
   z-index: 30;
-
-  /* AR開始前は非表示*/
-  display: none;
 }
 #distance-label {
   position: fixed;
@@ -96,8 +93,6 @@ body {
   border-radius: 8px;
 
   z-index: 999;
-  /*AR開始前は非表示*/
-  display: none;
 }
 /* 床を検出したらガイドを消す */
 body[data-floor-detected="true"] #guide {

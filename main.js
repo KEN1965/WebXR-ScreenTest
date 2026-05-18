@@ -139,6 +139,8 @@ startButton.addEventListener("click", async () => {
 
       // AR開始後の状態にする
     document.body.dataset.arStarted = "true";
+    document.body.dataset.floorDetected = "false";
+    
     // AR開始ボタンを非表示にする
     startButton.style.display = "none";
     versionLabel.style.display = "none";
