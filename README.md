@@ -1,39 +1,26 @@
-# WebXR-ScreenTest
+# WebXR Screen Test v2
 
-Android Chrome で WebXR AR を開始し、スマホの縦向き・横向きで DOM Overlay のボタン配置を切り替える最小サンプルです。
+Android Chrome の WebXR AR で、スマホの縦横を自動判定してUI配置を切り替えるサンプルです。
 
-## ファイル
+## 変更点
 
-- `index.html`: 画面と DOM Overlay の HTML
-- `style.css`: 縦向き・横向きのボタン配置
-- `main.js`: WebXR AR セッション開始、終了、向き判定
+- 「切替」ボタンで向きを変える仕様ではありません。
+- `screen.orientation` / `window.orientation` / viewport サイズから自動判定します。
+- `body[data-screen-orientation="portrait"]` と `body[data-screen-orientation="landscape"]` でCSSを切り替えます。
+- ボタン名を「切替」から「メニュー」に変更しました。
 
-## 実機確認
+## GitHub Pages
 
-WebXR AR は HTTPS または localhost が必要です。
-Android 実機で確認する場合は、以下のどちらかがおすすめです。
+リポジトリ直下に以下を置いてください。
 
-### 方法A: GitHub Pages / Netlify / Vercel など HTTPS にアップロード
+- index.html
+- style.css
+- main.js
+- README.md
 
-このフォルダをそのままアップロードして、Android Chrome で `index.html` を開きます。
-
-### 方法B: PC でローカルサーバー + HTTPS トンネル
-
-```bash
-cd WebXR-ScreenTest
-python3 -m http.server 8000
-```
-
-その後、ngrok などで HTTPS URL を発行して Android Chrome から開きます。
-
-```bash
-ngrok http 8000
-```
+Settings > Pages > Deploy from a branch > main / root を選択すると公開できます。
 
 ## 確認ポイント
 
-1. Android Chrome でページを開く
-2. 「ARを開始」を押す
-3. カメラが起動する
-4. スマホを縦向き・横向きに回転する
-5. 「撮影」「切替」ボタンの位置が変わる
+AR開始後、スマホを縦・横に回転すると、右上の表示が `portrait` / `landscape` に変わります。
+変われば、CSSのレイアウトも自動で切り替わっています。

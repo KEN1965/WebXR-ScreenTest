@@ -6,21 +6,53 @@ const orientationLabel = document.querySelector("#orientation-label");
 
 let xrSession = null;
 let gl = null;
+let lastOrientation = "unknown";
 
 function setStatus(message) {
   statusText.textContent = message;
 }
 
-function updateOrientationLabel() {
-  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-  document.body.dataset.orientation = isPortrait ? "portrait" : "landscape";
-  orientationLabel.textContent = `orientation: ${document.body.dataset.orientation}`;
+function getScreenOrientation() {
+  // WebXR中は CSS の @media (orientation) が期待通り更新されない端末があるため、
+  // screen.orientation / window.orientation / viewport size の順で実画面の向きを判定する。
+  const screenType = screen.orientation?.type || "";
+  if (screenType.includes("landscape")) return "landscape";
+  if (screenType.includes("portrait")) return "portrait";
+
+  if (typeof window.orientation === "number") {
+    return Math.abs(window.orientation) === 90 ? "landscape" : "portrait";
+  }
+
+  const viewport = window.visualViewport;
+  const width = viewport?.width || window.innerWidth;
+  const height = viewport?.height || window.innerHeight;
+  return width > height ? "landscape" : "portrait";
+}
+
+function applyOrientationLayout() {
+  const orientation = getScreenOrientation();
+  document.body.dataset.screenOrientation = orientation;
+
+  const viewport = window.visualViewport;
+  const width = Math.round(viewport?.width || window.innerWidth);
+  const height = Math.round(viewport?.height || window.innerHeight);
+  const angle = screen.orientation?.angle ?? window.orientation ?? "-";
+
+  orientationLabel.textContent = `${orientation} / ${width}x${height} / angle:${angle}`;
+  lastOrientation = orientation;
 }
 
 async function init() {
-  updateOrientationLabel();
-  window.addEventListener("resize", updateOrientationLabel);
-  screen.orientation?.addEventListener?.("change", updateOrientationLabel);
+  applyOrientationLayout();
+
+  window.addEventListener("resize", applyOrientationLayout);
+  window.visualViewport?.addEventListener("resize", applyOrientationLayout);
+  screen.orientation?.addEventListener?.("change", applyOrientationLayout);
+  window.addEventListener("orientationchange", () => {
+    // Android Chromeでは回転直後に値が遅れて更新されることがある。
+    applyOrientationLayout();
+    setTimeout(applyOrientationLayout, 300);
+  });
 
   if (!("xr" in navigator)) {
     setStatus("このブラウザは WebXR に対応していません。");
@@ -49,7 +81,7 @@ async function startAR() {
     xrSession.addEventListener("end", onSessionEnded);
 
     xrUi.classList.remove("hidden");
-    updateOrientationLabel();
+    applyOrientationLayout();
 
     const canvas = document.createElement("canvas");
     gl = canvas.getContext("webgl", { xrCompatible: true, alpha: true });
@@ -70,6 +102,12 @@ function onXRFrame(time, frame, referenceSpace) {
   const session = frame.session;
   session.requestAnimationFrame((t, f) => onXRFrame(t, f, referenceSpace));
 
+  // WebXRセッション中にも定期的に向きを確認する。
+  const currentOrientation = getScreenOrientation();
+  if (currentOrientation !== lastOrientation) {
+    applyOrientationLayout();
+  }
+
   const pose = frame.getViewerPose(referenceSpace);
   if (!pose) return;
 
@@ -88,13 +126,11 @@ startButton.addEventListener("click", startAR);
 closeButton.addEventListener("click", () => xrSession?.end());
 
 document.querySelector("#primary-action").addEventListener("click", () => {
-  console.log("primary action clicked");
-  orientationLabel.textContent = `撮影ボタン: ${document.body.dataset.orientation}`;
+  console.log("撮影", document.body.dataset.screenOrientation);
 });
 
 document.querySelector("#secondary-action").addEventListener("click", () => {
-  console.log("secondary action clicked");
-  orientationLabel.textContent = `切替ボタン: ${document.body.dataset.orientation}`;
+  console.log("メニュー", document.body.dataset.screenOrientation);
 });
 
 init();

@@ -88,30 +88,28 @@ button:active {
   font-size: 13px;
 }
 
-/* 縦向き: ボタンを下部に配置 */
-@media (orientation: portrait) {
-  #primary-action {
-    left: 50%;
-    bottom: calc(32px + env(safe-area-inset-bottom));
-    transform: translateX(-50%);
-  }
-
-  #secondary-action {
-    right: calc(24px + env(safe-area-inset-right));
-    bottom: calc(40px + env(safe-area-inset-bottom));
-  }
+/* 縦画面レイアウト */
+body[data-screen-orientation="portrait"] #primary-action {
+  left: 50%;
+  bottom: calc(32px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
 }
 
-/* 横向き: ボタンを右側に配置 */
-@media (orientation: landscape) {
-  #primary-action {
-    right: calc(32px + env(safe-area-inset-right));
-    top: 50%;
-    transform: translateY(-50%);
-  }
+body[data-screen-orientation="portrait"] #secondary-action {
+  right: calc(24px + env(safe-area-inset-right));
+  bottom: calc(40px + env(safe-area-inset-bottom));
+  transform: none;
+}
 
-  #secondary-action {
-    right: calc(40px + env(safe-area-inset-right));
-    bottom: calc(32px + env(safe-area-inset-bottom));
-  }
+/* 横画面レイアウト */
+body[data-screen-orientation="landscape"] #primary-action {
+  right: calc(32px + env(safe-area-inset-right));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+body[data-screen-orientation="landscape"] #secondary-action {
+  right: calc(40px + env(safe-area-inset-right));
+  bottom: calc(32px + env(safe-area-inset-bottom));
+  transform: none;
 }
