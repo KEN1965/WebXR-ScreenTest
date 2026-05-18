@@ -3,17 +3,7 @@ const startButton = document.getElementById("start-ar");
 const ui = document.getElementById("ui");
 const debug = document.getElementById("debug-orientation");
 const versionLabel = document.getElementById("version-label");
-
 const distanceLabel = document.getElementById("distance-label");
-
-//hit-testをするために追加
-let xrSession = null;
-let xrRefereneSpace = null;
-let viewerSpace = null;
-let hitTestSource = null;
-
-let floorDetected = false;
-let floorDistance = null;
 
 //WebXR描画用canvasを取得
 const canvas = document.getElementById("xr-canvas");
@@ -23,6 +13,15 @@ const gl = canvas.getContext("webgl", {
   xrCompatible: true,
   alpha: true,
 });
+
+//hit-testをするために追加
+let xrSession = null;
+let xrRefereceSpace = null;
+let viewerSpace = null;
+let hitTestSource = null;
+
+let floorDetected = false;
+let floorDistance = null;
 
 // 現在の向き
 let currentOrientation = null;
@@ -113,26 +112,39 @@ startButton.addEventListener("click", async () => {
 
     console.log("AR開始", session);
 
+    xrSession = session;
     // AR開始後の状態にする
     document.body.dataset.arStarted = "true";
+
+    //webglをwebxrで使える状態にする
+    await gl.makeXRCompatible();
 
     // AR開始ボタンを非表示にする
     startButton.style.display = "none";
     versionLabel.style.display = "none";
 
-
-    //webglをwebxrで使える状態にする
-    await gl.makeXRCompatible();
-
     //webxrの描出レイヤーを作成する
     session.updateRenderState({
       baseLayer: new XRWebGLLayer(session, gl)
     });
+
+      // AR空間の基準
+      xrReferenceSpace = await session.requestReferenceSpace("local");
+
+      // スマホ視点の基準
+      viewerSpace = await session.requestReferenceSpace("viewer");
+
+      // スマホ中心から前方に向けてhit-testする
+      hitTestSource = await session.requestHitTestSource({
+        space: viewerSpace,
+      });
+
     //AR開始後に向きを再判定
     updateOrientationByScreenSize();
 
     //webxrの描画ループ開始
     session.requestAnimationFrame(onXRFrame);
+
 
   } catch (error) {
 
@@ -140,20 +152,6 @@ startButton.addEventListener("click", async () => {
 
     alert("AR開始失敗");
   }
-    xrSession = session;
-
-    // AR空間の基準
-    xrReferenceSpace = await session.requestReferenceSpace("local");
-
-    // スマホ視点の基準
-    viewerSpace = await session.requestReferenceSpace("viewer");
-
-    // スマホ中心から前方に向けてhit-testする
-    hitTestSource = await session.requestHitTestSource({
-      space: viewerSpace
-
-    
-
 });
 
 
@@ -182,14 +180,18 @@ function onXRFrame(time, frame) {
     const floorY = hitPose.transform.position.y;
     const phoneY = viewerPose.transform.position.y;
 
-    floorDistance = Math.ads(phoneY - floorY);
+    floorDistance = Math.abs(phoneY - floorY);
+
+    distanceLabel.textContent = `${floorDistance.toFixed(2)} m`;
 
     console.log("floor distance:", floorDistance.toFixed(2), "m");
   } else {
     floorDetected = false;
     document.body.dataset.floorDetected = "false";
 
+    distanceLabel.textContent = "-- m";
+
   }
 
-  distanceLabel.textContent = `${floorDistance.toFixed(2)} m`;
+  
 }
