@@ -10,7 +10,7 @@ body {
 /* AR開始ボタン */
 #start-ar {
   position: fixed;
-  z-index: 100;
+  z-index: 9999;
 
   bottom: 40px;
   left: 50%;
@@ -19,6 +19,8 @@ body {
 
   padding: 16px 24px;
   font-size: 18px;
+
+  pointer-events: auto;
 }
 /* バージョン表示 */
 #version-label {
@@ -57,10 +59,6 @@ body {
   font-size: 16px;
 
   background: white;
-}
-/* AR開始前は撮影ボタンを非表示 */
-#ui {
-  display: none;
 }
 /*床を認識して下さい。のガイド */
 #guide {
@@ -158,4 +156,7 @@ body[data-screen-orientation="landscape"] #debug-orientation {
   height: 100vh;
 
   z-index: 0;
+
+  /*canvasがAR開始ボタンのタップを邪魔しないようにする */
+  pointer-events: none;
 }
