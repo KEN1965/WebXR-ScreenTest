@@ -8,33 +8,24 @@
 </head>
 <body>
 
-  <!-- WebXR開始ボタン -->
+  <!-- WebXR描画用canvas -->
+  <canvas id="xr-canvas"></canvas>
+
   <button id="start-ar">
     AR開始
   </button>
 
-  <!-- WebXR DOM Overlay UI -->
   <div id="ui">
 
-    <!-- 左側ボタン -->
     <button id="menu-btn">
       メニュー
     </button>
 
-    <!-- 右側ボタン群 -->
     <div id="right-buttons">
-
-      <button id="capture-btn">
-        撮影
-      </button>
-
-      <button id="save-btn">
-        保存
-      </button>
-
+      <button id="capture-btn">撮影</button>
+      <button id="save-btn">保存</button>
     </div>
 
-    <!-- デバッグ表示 -->
     <div id="debug-orientation">
       orientation
     </div>
@@ -43,5 +34,6 @@
 
   <script type="module" src="main.js"></script>
 
+</body>
 </body>
 </html>

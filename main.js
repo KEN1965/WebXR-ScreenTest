@@ -3,6 +3,15 @@ const startButton = document.getElementById("start-ar");
 const ui = document.getElementById("ui");
 const debug = document.getElementById("debug-orientation");
 
+//WebXR描画用canvasを取得
+const canvas = document.getElementById("xr-canvas");
+
+//webXR用のwebGLコンテキストを作成
+const gl = canvas.getContext("webgl", {
+  xrCompatible: true,
+  alpha: true,
+});
+
 // 現在の向き
 let currentOrientation = null;
 
@@ -91,7 +100,18 @@ startButton.addEventListener("click", async () => {
 
     console.log("AR開始", session);
 
+    //webglをwebxrで使える状態にする
+    await gl.makeXRCompatible();
+
+    //webxrの描出レイヤーを作成する
+    session.updateRenderState({
+      baseLayer: new XRWebGLLayer(session, gl)
+    });
+    //AR開始後に向きを再判定
     updateOrientationByScreenSize();
+
+    //webxrの描画ループ開始
+    session.requestAnimationFrame(onXRFrame);
 
   } catch (error) {
 
@@ -100,3 +120,13 @@ startButton.addEventListener("click", async () => {
     alert("AR開始失敗");
   }
 });
+
+//webxr描画ループ
+function onXRFrame(time, frame) {
+  const session = frame.session;
+
+  //次のフレームも描画する
+  session.requestAnimationFrame(onXRFrame);
+  // 今回は3Dオブジェクトを描かない
+  // ただし、この描画ループがあることでWebXRのカメラ背景が維持される
+}

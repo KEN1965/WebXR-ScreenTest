@@ -85,10 +85,10 @@ body[data-screen-orientation="landscape"] #menu-btn {
 
   position: absolute;
 
-  left: 24px;
-  top: 50%;
+  left: 50%;
+  bottom: 24px
 
-  transform: translateY(-50%);
+  transform: translateY(-50%) rotate(90deg);
 }
 
 body[data-screen-orientation="landscape"] #right-buttons {
@@ -98,9 +98,25 @@ body[data-screen-orientation="landscape"] #right-buttons {
   right: 24px;
   top: 50%;
 
-  transform: translateY(-50%);
+  transform: translateY(-50%) rotate(90deg);
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 16px;
+}
+body[data-screen-orientation="landscape"] #debug-orientation {
+  left: 24px;
+  top: 50%;
+
+  transform: translateY(-50%) rotate(90deg);
+}
+/* WebXR描画用canvas */
+#xr-canvas {
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 0;
 }
