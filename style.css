@@ -20,6 +20,20 @@ body {
   padding: 16px 24px;
   font-size: 18px;
 }
+/* バージョン表示 */
+#version-label {
+  position: fixed;
+
+  bottom: 8px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  color: white;
+  font-size: 14px;
+
+  z-index: 100;
+}
 
 /* WebXR UI全体 */
 #ui {
