@@ -137,14 +137,14 @@ startButton.addEventListener("click", async () => {
     //AR開始後に向きを再判定
     updateOrientationByScreenSize();
 
-    //webxrの描画ループ開始
-    session.requestAnimationFrame(onXRFrame);
-
       // AR開始後の状態にする
     document.body.dataset.arStarted = "true";
     // AR開始ボタンを非表示にする
     startButton.style.display = "none";
     versionLabel.style.display = "none";
+
+        //webxrの描画ループ開始
+    session.requestAnimationFrame(onXRFrame);
 
   } catch (error) {
 
