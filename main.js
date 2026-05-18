@@ -2,6 +2,7 @@
 const startButton = document.getElementById("start-ar");
 const ui = document.getElementById("ui");
 const debug = document.getElementById("debug-orientation");
+const versionLabel = document.getElementById("version-label");
 
 //WebXR描画用canvasを取得
 const canvas = document.getElementById("xr-canvas");
@@ -99,6 +100,14 @@ startButton.addEventListener("click", async () => {
     );
 
     console.log("AR開始", session);
+
+    // AR開始後の状態にする
+    document.body.dataset.arStarted = "true";
+
+    // AR開始ボタンを非表示にする
+    startButton.style.display = "none";
+    versionLabel.style.display = "none";
+
 
     //webglをwebxrで使える状態にする
     await gl.makeXRCompatible();

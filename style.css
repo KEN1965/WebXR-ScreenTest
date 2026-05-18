@@ -56,6 +56,10 @@ body {
 
   background: white;
 }
+/* AR開始前は撮影ボタンを非表示 */
+#ui {
+  display: none;
+}
 
 /* デバッグ表示 */
 #debug-orientation {
@@ -72,24 +76,31 @@ body {
 
   z-index: 999;
 }
-
+/* AR開始後だけUIを表示 */
+body[data-ar-started="true"] #ui {
+  display: block;
+}
 /* portrait:撮影ボタンを画面中央下部に配置 */
 body[data-screen-orientation="portrait"] #capture-btn {
-  position: absolute;
+  position: fixed;
 
   left: 50%;
   bottom: 40px;
 
   transform: translateX(-50%);
+
+  z-index: 20;
 }
 /* landscape ：縦画面と同じ位置に置き、文字を横向きに補正*/
 body[data-screen-orientation="landscape"] #capture-btn {
-  position: absolute;
+ position: fixed;
 
   left: 50%;
   bottom: 40px;
 
   transform: translateX(-50%) rotate(90deg);
+
+  z-index: 20;
 }
 
 body[data-screen-orientation="landscape"] #debug-orientation {
