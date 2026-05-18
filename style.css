@@ -60,6 +60,44 @@ body {
 #ui {
   display: none;
 }
+/*床を認識して下さい。のガイド */
+#guide {
+  position: fixed;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  color: white;
+  background: rgba(0,0,0,0.6);
+
+  padding: 16px 20px;
+  border-radius: 16px;
+
+  font-size: 16px;
+  text-align: center;
+
+  z-index: 30;
+}
+#distance-label {
+  position: fixed;
+
+  top: 56px;
+  left: 12px;
+
+  color: white;
+  background: rgba(0,0,0,0.6);
+
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  z-index: 999;
+}
+
+body[data-floor-detected="true"] #guide {
+  display: none;
+}
 
 /* デバッグ表示 */
 #debug-orientation {

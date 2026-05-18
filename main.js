@@ -4,6 +4,17 @@ const ui = document.getElementById("ui");
 const debug = document.getElementById("debug-orientation");
 const versionLabel = document.getElementById("version-label");
 
+const distanceLabel = document.getElementById("distance-label");
+
+//hit-testをするために追加
+let xrSession = null;
+let xrRefereneSpace = null;
+let viewerSpace = null;
+let hitTestSource = null;
+
+let floorDetected = false;
+let floorDistance = null;
+
 //WebXR描画用canvasを取得
 const canvas = document.getElementById("xr-canvas");
 
@@ -90,7 +101,8 @@ startButton.addEventListener("click", async () => {
     const session = await navigator.xr.requestSession(
       "immersive-ar",
       {
-
+        //hit-test
+        requiredFeatures: ["hit-test"],
         optionalFeatures: ["dom-overlay"],
 
         domOverlay: {
@@ -128,7 +140,22 @@ startButton.addEventListener("click", async () => {
 
     alert("AR開始失敗");
   }
+    xrSession = session;
+
+    // AR空間の基準
+    xrReferenceSpace = await session.requestReferenceSpace("local");
+
+    // スマホ視点の基準
+    viewerSpace = await session.requestReferenceSpace("viewer");
+
+    // スマホ中心から前方に向けてhit-testする
+    hitTestSource = await session.requestHitTestSource({
+      space: viewerSpace
+
+    
+
 });
+
 
 //webxr描画ループ
 function onXRFrame(time, frame) {
@@ -136,6 +163,33 @@ function onXRFrame(time, frame) {
 
   //次のフレームも描画する
   session.requestAnimationFrame(onXRFrame);
-  // 今回は3Dオブジェクトを描かない
-  // ただし、この描画ループがあることでWebXRのカメラ背景が維持される
+
+  if (!hitTestSource || !xrReferenceSpace) return;
+
+  const hitTestResults = frame.getHitTestResults(hitTestSource);
+
+  if (hitTestResults.length > 0) {
+    const hit = hitTestResults[0];
+
+    const hitPose = hit.getPose(xrRefereneSpace);
+    const viewerPose = frame.getViewerPose(xrRefereneSpace);
+
+    if (!hitPose || !viewerPose) return;
+
+    floorDetected = true;
+    document.body.dataset.floorDetected = "true";
+
+    const floorY = hitPose.transform.position.y;
+    const phoneY = viewerPose.transform.position.y;
+
+    floorDistance = Math.ads(phoneY - floorY);
+
+    console.log("floor distance:", floorDistance.toFixed(2), "m");
+  } else {
+    floorDetected = false;
+    document.body.dataset.floorDetected = "false";
+
+  }
+
+  distanceLabel.textContent = `${floorDistance.toFixed(2)} m`;
 }
