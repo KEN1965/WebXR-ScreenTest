@@ -16,7 +16,7 @@ const gl = canvas.getContext("webgl", {
 
 //hit-testをするために追加
 let xrSession = null;
-let xrRefereceSpace = null;
+let xrReferenceSpace = null;
 let viewerSpace = null;
 let hitTestSource = null;
 
@@ -159,6 +159,7 @@ startButton.addEventListener("click", async () => {
 function onXRFrame(time, frame) {
   const session = frame.session;
 
+
   //次のフレームも描画する
   session.requestAnimationFrame(onXRFrame);
 
@@ -169,8 +170,8 @@ function onXRFrame(time, frame) {
   if (hitTestResults.length > 0) {
     const hit = hitTestResults[0];
 
-    const hitPose = hit.getPose(xrRefereneSpace);
-    const viewerPose = frame.getViewerPose(xrRefereneSpace);
+    const hitPose = hit.getPose(xrReferenceSpace);
+    const viewerPose = frame.getViewerPose(xrReferenceSpace);
 
     if (!hitPose || !viewerPose) return;
 
