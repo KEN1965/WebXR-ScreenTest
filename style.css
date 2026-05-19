@@ -168,17 +168,6 @@ body[data-screen-orientation="portrait"] #action-area {
   border-top: 2px solid rgba(255,255,255,0.85);
 }
 
-/* 横画面：右に黒帯 */
-body[data-screen-orientation="landscape"] #action-area {
-  top: 0;
-  right: 0;
-  bottom: 0;
-
-  width: 132px;
-
-  border-left: 2px solid rgba(255,255,255,0.85);
-}
-
 
 /* =========================================
    ボタン配置エリア
@@ -206,18 +195,103 @@ body[data-screen-orientation="portrait"] #action-buttons {
 
   flex-direction: row;
 }
+/* 横画面：実機では右側に見える帯 */
+body[data-screen-orientation="landscape"] #action-area {
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-/* 横：右黒帯の中央に縦並び */
+  height: 132px;
+
+  border-top: 2px solid rgba(255,255,255,0.85);
+}
+
+/* 横画面：帯の中にボタンを配置 */
 body[data-screen-orientation="landscape"] #action-buttons {
   left: 50%;
   top: 50%;
 
   transform: translate(-50%, -50%);
 
-  flex-direction: column;
+  flex-direction: row;
+}
+/* =========================================
+   横画面：実機では右側に見える帯
+========================================= */
+
+body[data-screen-orientation="landscape"] #action-area {
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 132px;
+
+  border-top: 2px solid rgba(255,255,255,0.85);
 }
 
 
+/* =========================================
+   横画面：帯の中に横並び配置
+========================================= */
+
+body[data-screen-orientation="landscape"] #action-buttons {
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  flex-direction: row;
+}
+
+
+/* =========================================
+   横画面：ボタン順番
+========================================= */
+
+/* 撮影ボタンを左 */
+body[data-screen-orientation="landscape"] #capture-btn {
+  order: 1;
+}
+
+/* AIボタンを右 */
+body[data-screen-orientation="landscape"] #ai-btn {
+  order: 2;
+}
+
+
+/* =========================================
+   横画面：AI文字向き補正
+========================================= */
+
+body[data-screen-orientation="landscape"] #ai-btn {
+  transform: rotate(90deg);
+}
+
+
+/* =========================================
+   横画面：左上表示向き補正
+========================================= */
+
+body[data-screen-orientation="landscape"] #status-panel {
+
+  transform: rotate(90deg);
+
+  transform-origin: top left;
+}
+
+
+/* =========================================
+   横画面：ガイド向き補正
+========================================= */
+
+body[data-screen-orientation="landscape"] #guide {
+
+  transform:
+    translate(-50%, -50%)
+    rotate(90deg);
+}
 /* =========================================
    ボタン共通
 ========================================= */
