@@ -1,6 +1,11 @@
 // =========================================
 // HTML要素取得
 // =========================================
+const statusPanel = document.getElementById("status-panel");
+const actionArea = document.getElementById("action-area");
+const actionButtons = document.getElementById("action-buttons");
+const aiButton = document.getElementById("ai-btn");
+const captureButton = document.getElementById("capture-btn");
 
 // AR開始ボタン
 const startButton = document.getElementById("start-ar");
@@ -20,7 +25,101 @@ const distanceLabel = document.getElementById("distance-label");
 // WebXR描画用canvas
 const canvas = document.getElementById("xr-canvas");
 
+function applyUILayout(orientation) {
+  // 共通：ステータスを必ず左上に表示
+  statusPanel.style.cssText = `
+    position: fixed !important;
+    top: 16px !important;
+    left: 16px !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    z-index: 2000 !important;
+    color: white !important;
+  `;
 
+  if (orientation === "portrait") {
+    // 縦：下に黒帯
+    actionArea.style.cssText = `
+      position: fixed !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      top: auto !important;
+      height: 142px !important;
+      width: auto !important;
+      background: rgba(0,0,0,0.78) !important;
+      border-top: 2px solid rgba(255,255,255,0.85) !important;
+      border-left: none !important;
+      z-index: 600 !important;
+    `;
+
+    actionButtons.style.cssText = `
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      width: 170px !important;
+      height: 80px !important;
+      transform: translate(-50%, -50%) !important;
+    `;
+
+    aiButton.style.cssText += `
+      position: absolute !important;
+      left: 0 !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+    `;
+
+    captureButton.style.cssText += `
+      position: absolute !important;
+      right: 0 !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+    `;
+  }
+
+  if (orientation === "landscape") {
+    // 横：右に黒帯
+    actionArea.style.cssText = `
+      position: fixed !important;
+      top: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: auto !important;
+      width: 132px !important;
+      height: auto !important;
+      background: rgba(0,0,0,0.78) !important;
+      border-left: 2px solid rgba(255,255,255,0.85) !important;
+      border-top: none !important;
+      z-index: 600 !important;
+    `;
+
+    actionButtons.style.cssText = `
+      position: absolute !important;
+      left: 0 !important;
+      top: 0 !important;
+      width: 132px !important;
+      height: 100% !important;
+      transform: none !important;
+    `;
+
+    // 撮影ボタン：右帯の中央
+    captureButton.style.cssText += `
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
+    `;
+
+    // AIボタン：撮影ボタンの下
+    aiButton.style.cssText += `
+      position: absolute !important;
+      left: 50% !important;
+      top: calc(50% + 96px) !important;
+      transform: translate(-50%, -50%) !important;
+    `;
+  }
+}
 // =========================================
 // WebGLコンテキスト作成
 // =========================================
@@ -74,6 +173,7 @@ function setScreenOrientation(orientation) {
 
   // 左上表示更新
   orientationLabel.textContent = orientation;
+  applyUILayout(orientation);
 
   console.log("orientation:", orientation);
 }
