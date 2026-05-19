@@ -45,7 +45,7 @@ body {
   pointer-events: none;
   z-index: 10;
 
-  display: none;
+  visibility: hidden;
 }
 
 /* ボタン共通 */
@@ -124,7 +124,7 @@ body[data-ar-started="true"] #distance-label {
 }
 /* AR開始後だけUIを表示 */
 body[data-ar-started="true"] #ui {
-  display: block;
+    visibility: visible;
 }
 body[data-ar-started="true"] #xr-canvas {
   display: block;
