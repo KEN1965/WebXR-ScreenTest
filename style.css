@@ -213,7 +213,7 @@ body[data-screen-orientation="landscape"] #action-buttons {
 
   transform: translate(-50%, -50%);
 
-  flex-direction: row;
+  flex-direction: column-reverse;
 }
 /* =========================================
    横画面：実機では右側に見える帯
@@ -221,7 +221,7 @@ body[data-screen-orientation="landscape"] #action-buttons {
 
 body[data-screen-orientation="landscape"] #action-area {
 
-  left: 0;
+  top: 0;
   right: 0;
   bottom: 0;
 
@@ -242,7 +242,7 @@ body[data-screen-orientation="landscape"] #action-buttons {
 
   transform: translate(-50%, -50%);
 
-  flex-direction: row;
+  flex-direction: column-reverse;
 }
 
 
@@ -275,10 +275,11 @@ body[data-screen-orientation="landscape"] #ai-btn {
 ========================================= */
 
 body[data-screen-orientation="landscape"] #status-panel {
-
-  transform: rotate(90deg);
-
-  transform-origin: top left;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  transform: none;
+  z-index: 100;
 }
 
 
