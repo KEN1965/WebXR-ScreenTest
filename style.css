@@ -1,4 +1,10 @@
 /* =========================================
+   v0.0.4.18
+   WebXR Screen Test UI
+========================================= */
+
+
+/* =========================================
    基本設定
 ========================================= */
 
@@ -24,7 +30,6 @@ body {
   height: 100vh;
 
   z-index: 0;
-
   pointer-events: none;
 }
 
@@ -44,7 +49,6 @@ body {
   z-index: 9999;
 
   padding: 16px 24px;
-
   font-size: 18px;
 }
 
@@ -86,7 +90,7 @@ body[data-ar-started="true"] #ui {
 /* =========================================
    左上ステータス
    portrait / landscape
-   距離表示
+   距離
 ========================================= */
 
 #status-panel {
@@ -95,7 +99,7 @@ body[data-ar-started="true"] #ui {
   top: 16px;
   left: 16px;
 
-  z-index: 80;
+  z-index: 1000;
 
   color: white;
 
@@ -103,6 +107,8 @@ body[data-ar-started="true"] #ui {
   line-height: 1.5;
 
   text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+
+  transform: none;
 }
 
 
@@ -118,7 +124,7 @@ body[data-ar-started="true"] #ui {
 
   transform: translate(-50%, -50%);
 
-  z-index: 90;
+  z-index: 900;
 
   max-width: 280px;
 
@@ -135,7 +141,6 @@ body[data-ar-started="true"] #ui {
   text-align: center;
 }
 
-/* 床検出後はガイドを非表示 */
 body[data-floor-detected="true"] #guide {
   display: none;
 }
@@ -143,21 +148,23 @@ body[data-floor-detected="true"] #guide {
 
 /* =========================================
    黒帯エリア
-   縦：下
-   横：右
 ========================================= */
 
 #action-area {
   position: fixed;
 
-  z-index: 60;
+  z-index: 600;
 
   pointer-events: none;
 
   background: rgba(0,0,0,0.78);
 }
 
-/* 縦画面：下に黒帯 */
+
+/* =========================================
+   縦画面：下帯
+========================================= */
+
 body[data-screen-orientation="portrait"] #action-area {
   left: 0;
   right: 0;
@@ -170,56 +177,28 @@ body[data-screen-orientation="portrait"] #action-area {
 
 
 /* =========================================
-   ボタン配置エリア
+   横画面：右帯
+   ※ flex/order は使わない
 ========================================= */
 
-#action-buttons {
-  position: absolute;
+body[data-screen-orientation="landscape"] #action-area {
+  top: 0;
+  right: 0;
+  bottom: 0;
 
-  display: flex;
+  width: 132px;
 
-  align-items: center;
-  justify-content: center;
-
-  gap: 20px;
-
-  pointer-events: auto;
+  border-left: 2px solid rgba(255,255,255,0.85);
 }
 
-/* 縦：黒帯の中央に横並び */
-body[data-screen-orientation="portrait"] #action-buttons {
-  left: 50%;
-  top: 50%;
 
-  transform: translate(-50%, -50%);
-
-  flex-direction: row;
-}
-/* =========================================
-   横画面：AI文字向き補正
-========================================= */
-
-body[data-screen-orientation="landscape"] #ai-btn {
-  transform: rotate(90deg);
-}
-
-/* =========================================
-   横画面：ガイド向き補正
-========================================= */
-
-body[data-screen-orientation="landscape"] #guide {
-
-  transform:
-    translate(-50%, -50%)
-    rotate(90deg);
-}
 /* =========================================
    ボタン共通
 ========================================= */
 
 #ai-btn,
 #capture-btn {
-  display: block;
+  position: absolute;
 
   box-sizing: border-box;
 
@@ -229,8 +208,6 @@ body[data-screen-orientation="landscape"] #guide {
   border-radius: 50%;
 
   pointer-events: auto;
-
-  flex: 0 0 auto;
 }
 
 
@@ -269,85 +246,79 @@ body[data-screen-orientation="landscape"] #guide {
 
 
 /* =========================================
-   ボタン順番
+   縦画面：ボタン配置
+   AI左 / 撮影右
 ========================================= */
 
-/* 縦：AI → 撮影 */
+body[data-screen-orientation="portrait"] #action-buttons {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 170px;
+  height: 80px;
+
+  transform: translate(-50%, -50%);
+}
+
 body[data-screen-orientation="portrait"] #ai-btn {
-  order: 1;
+  left: 0;
+  top: 50%;
+
+  transform: translateY(-50%);
 }
 
 body[data-screen-orientation="portrait"] #capture-btn {
-  order: 2;
+  right: 0;
+  top: 50%;
+
+  transform: translateY(-50%);
 }
 
-/* =========================
-   v0.0.6.1 強制上書き
-========================= */
 
-/* 横画面：右帯 */
-body[data-screen-orientation="landscape"] #action-area {
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: auto !important;
+/* =========================================
+   横画面：ボタン配置
+   撮影中央 / AI下
+========================================= */
 
-  width: 132px !important;
-  height: auto !important;
-
-  border-left: 2px solid rgba(255,255,255,0.85) !important;
-  border-top: none !important;
-}
-
-/* 横画面：ボタン配置エリア */
 body[data-screen-orientation="landscape"] #action-buttons {
-  position: absolute !important;
+  position: absolute;
 
-  left: 0 !important;
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
+  left: 0;
+  top: 0;
 
-  transform: none !important;
+  width: 132px;
+  height: 100%;
 
-  display: block !important;
+  transform: none;
 }
 
-/* 横画面：撮影ボタンを中央 */
+/* 撮影ボタン：右帯の中央 */
 body[data-screen-orientation="landscape"] #capture-btn {
-  position: absolute !important;
+  left: 50%;
+  top: 50%;
 
-  left: 50% !important;
-  top: 50% !important;
-
-  transform: translate(-50%, -50%) !important;
-
-  order: unset !important;
+  transform: translate(-50%, -50%);
 }
 
-/* 横画面：AIボタンを撮影ボタンの下 */
+/* AIボタン：撮影ボタンの下 */
 body[data-screen-orientation="landscape"] #ai-btn {
-  position: absolute !important;
+  left: 50%;
+  top: calc(50% + 96px);
 
-  left: 50% !important;
-  top: calc(50% + 96px) !important;
-
-  transform: translate(-50%, -50%) !important;
-
-  order: unset !important;
+  transform: translate(-50%, -50%);
 }
 
-/* 横画面：左上表示を左上に固定 */
+
+/* =========================================
+   横画面：ステータス位置
+   左上固定
+========================================= */
+
 body[data-screen-orientation="landscape"] #status-panel {
-  position: fixed !important;
+  top: 16px;
+  left: 16px;
 
-  top: 16px !important;
-  left: 16px !important;
-  right: auto !important;
-  bottom: auto !important;
-
-  transform: none !important;
-  transform-origin: unset !important;
-
-  z-index: 1000 !important;
+  transform: none;
 }
