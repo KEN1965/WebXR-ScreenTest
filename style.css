@@ -231,7 +231,7 @@ body[data-floor-detected="true"] #guide {
 #action-buttons {
 
   /* 固定表示 */
-  position: fixed;
+  position: absolute;
 
   /* ボタンだけタップ可能 */
   pointer-events: auto;
@@ -257,24 +257,13 @@ body[data-floor-detected="true"] #guide {
 #ai-btn,
 #capture-btn {
 
-  /* block化 */
-  display: block;
+  width: 78px;
+  height: 78px;
 
-  /* サイズ計算を安定 */
-  box-sizing: border-box;
-
-  /* 余白リセット */
-  padding: 0;
-  margin: 0;
-
-  /* 真円 */
   border-radius: 50%;
-
-  /* タップ可能 */
-  pointer-events: auto;
-
-  /* flex縮小禁止 */
-  flex: 0 0 auto;
+  background:white;
+  border: 6px solid rgba(0,0,0,0.35);
+  box-shadow: 0 0 12px rgba(255,255,255,0.35);
 }
 
 
@@ -303,31 +292,63 @@ body[data-floor-detected="true"] #guide {
 #ai-btn {
 
   /* サイズ */
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
 
-  /* 緑色 */
-  background: #5fe36f;
-
-  /* 文字色 */
-  color: black;
-
-  /* 枠なし */
-  border: none;
-
-  /* 太字 */
-  font-weight: bold;
-
-  /* 文字サイズ */
+  border-radius: 505;
+  border:none;
+  background: #63e66c;
+  color:black;
   font-size: 18px;
+  font-weight: bold;
+}
+/* =========================================
+   ボタン背景帯
+========================================= */
 
-  /* 縦中央 */
-  line-height: 56px;
+#action-area {
 
-  /* 横中央 */
-  text-align: center;
+  position: fixed;
+
+  z-index: 40;
+
+  pointer-events: none;
+
+  background: rgba(0,0,0,0.72);
+
+  backdrop-filter: blur(8px);
 }
 
+/* =========================================
+   縦画面：下帯
+========================================= */
+
+body[data-screen-orientation="portrait"] #action-area {
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 140px;
+
+  /* 上側白ライン */
+  border-top: 1px solid rgba(255,255,255,0.75);
+}
+/* =========================================
+   横画面：右帯
+========================================= */
+
+body[data-screen-orientation="landscape"] #action-area {
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 120px;
+
+  /* 左白ライン */
+  border-left: 1px solid rgba(255,255,255,0.75);
+}
 
 /* =========================================
    縦画面UI
@@ -354,17 +375,14 @@ body[data-screen-orientation="portrait"] #action-buttons {
 ========================================= */
 
 body[data-screen-orientation="landscape"] #action-buttons {
-
-  /* 右側配置 */
-  right: 28px;
+  left: 50%;
 
   /* 縦中央 */
   top: 50%;
 
   /* 縦中央補正 */
-  transform: translateY(-50%);
+  transform: translateY(-50%, -50%);
 
-  /* 縦並び */
   flex-direction: column;
 }
 
@@ -383,4 +401,8 @@ body[data-screen-orientation="landscape"] #capture-btn {
 body[data-screen-orientation="landscape"] #ai-btn {
 
   order: 2;
+}
+
+body[data-screen-orientation="landscape"] #ai-btn {
+  transform: rotate(90deg);
 }
