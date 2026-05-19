@@ -7,93 +7,50 @@ body {
   background: black;
 }
 
-/* AR開始ボタン */
+/* WebXR描画用 */
+#xr-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* AR開始前UI */
 #start-ar {
   position: fixed;
-  z-index: 9999;
-  bottom: 40px;
   left: 50%;
+  bottom: 40px;
   transform: translateX(-50%);
-
+  z-index: 9999;
   padding: 16px 24px;
   font-size: 18px;
-  pointer-events: auto;
 }
-/* バージョン表示 */
+
 #version-label {
   position: fixed;
-  bottom: 8px;
   left: 50%;
+  bottom: 8px;
   transform: translateX(-50%);
   z-index: 9999;
   color: white;
   font-size: 14px;
 }
 
-/* WebXR UI全体 */
+/* AR中UI */
 #ui {
   position: fixed;
   inset: 0;
-  pointer-events: none;
   z-index: 10;
+  pointer-events: none;
   visibility: hidden;
 }
-/* AR開始後だけUIを表示 */
+
 body[data-ar-started="true"] #ui {
-    visibility: visible;
+  visibility: visible;
 }
 
-/* ボタン共通 */
-#ui button {
-  pointer-events: auto;
-
-  border: none;
-  border-radius: 999px;
-
-  padding: 14px 20px;
-  font-size: 16px;
-
-  background: white;
-}
-
-#distance-label {
-  position: fixed;
-
-  top: 56px;
-  left: 12px;
-
-  color: white;
-  background: rgba(0,0,0,0.6);
-
-  padding: 8px 12px;
-  border-radius: 8px;
-
-  z-index: 999;
-}
-/*床を認識して下さい。のガイド */
-#guide {
-  position: fixed;
-
-  left: 50%;
-  top: 50%;
-
-  transform: translate(-50%, -50%);
-
-  max-width:280px;
-  padding: 16px 20px;
-
-  color: white;
-  background: rgba(0,0,0,0.65);
-
-  padding: 16px 20px;
-  border-radius: 18px;
-
-  font-size: 16px;
-  line-height: 1.5;
-  text-align: center;
-
-  z-index: 30;
-}
 /* 左上：orientation + distance */
 #status-panel {
   position: fixed;
@@ -105,12 +62,26 @@ body[data-ar-started="true"] #ui {
   text-shadow: 0 1px 4px rgba(0,0,0,0.8);
 }
 
-/* 床を検出したらガイドを消す */
+/* ガイド */
+#guide {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 16px 20px;
+  border-radius: 18px;
+  color: white;
+  background: rgba(0,0,0,0.65);
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: center;
+}
+
 body[data-floor-detected="true"] #guide {
   display: none;
 }
 
-/* ボタン共通 */
+/* ボタンエリア */
 #action-buttons {
   position: fixed;
   pointer-events: auto;
@@ -120,8 +91,8 @@ body[data-floor-detected="true"] #guide {
 
 #capture-btn,
 #ai-btn {
-  border: none;
   border-radius: 50%;
+  border: none;
   pointer-events: auto;
 }
 
@@ -135,89 +106,26 @@ body[data-floor-detected="true"] #guide {
 #ai-btn {
   width: 56px;
   height: 56px;
-  background: #45d66b;
+  background: #5fe36f;
   color: black;
   font-weight: bold;
   font-size: 18px;
 }
 
-/* デバッグ表示 */
-#debug-orientation {
-  position: absolute;
-
-  top: 12px;
-  left: 12px;
-
-  color: white;
-  background: rgba(0,0,0,0.6);
-
-  padding: 8px 12px;
-  border-radius: 8px;
-
-  z-index: 999;
-}
-/*AR開始後にガイドを表示*/
-body[data-ar-started="true"] #guide {
-  display: block;
-}
-/*AR開始後に距離表示を表示*/
-body[data-ar-started="true"] #distance-label {
-  display: block;
-}
-
-body[data-ar-started="true"] #xr-canvas {
-  display: block;
-}
-/* 縦：中央下部にAIボタンと撮影ボタン */
-body[data-screen-orientation="portrait"] #action-buttons{
+/* 縦画面 */
+body[data-screen-orientation="portrait"] #action-buttons {
   left: 50%;
   bottom: 32px;
-
   transform: translateX(-50%);
-
-  display: flex;
   flex-direction: row;
-  align-items:center;
-  gap: 18px;
-
+  align-items: center;
 }
-/* 横：右側に撮影、その下にAI */
+
+/* 横画面 */
 body[data-screen-orientation="landscape"] #action-buttons {
   right: 28px;
   top: 50%;
-
   transform: translateY(-50%);
-
-  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-}
-
-body[data-screen-orientation="landscape"] #debug-orientation {
-  left: 24px;
-  top: 50%;
-
-  transform: translateY(-50%) rotate(90deg);
-}
-/* 横画面時、DOM Overlayが縦基準になる場合の文字補正 */
-body[data-screen-orientation="landscape"] #ai-btn {
-  transform: rotate(90deg);
-}
-
-/* WebXR描画用canvas */
-#xr-canvas {
-  position: fixed;
-  inset: 0;
-
-  width: 100vw;
-  height: 100vh;
-
-  z-index: 0;
-
-  /*canvasがAR開始ボタンのタップを邪魔しないようにする */
-  pointer-events: none;
-
-  /*AR開始前は非表示 */
-  display: none;
 }
