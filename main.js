@@ -4,6 +4,7 @@ const ui = document.getElementById("ui");
 const debug = document.getElementById("debug-orientation");
 const versionLabel = document.getElementById("version-label");
 const distanceLabel = document.getElementById("distance-label");
+const guide = document.getElementById("guide")
 
 //WebXR描画用canvasを取得
 const canvas = document.getElementById("xr-canvas");
@@ -175,6 +176,7 @@ function onXRFrame(time, frame) {
   const hitTestResults = frame.getHitTestResults(hitTestSource);
 
   if (hitTestResults.length > 0) {
+
     const hit = hitTestResults[0];
 
     const hitPose = hit.getPose(xrReferenceSpace);
@@ -193,11 +195,16 @@ function onXRFrame(time, frame) {
     distanceLabel.textContent = `${floorDistance.toFixed(2)} m`;
 
     console.log("floor distance:", floorDistance.toFixed(2), "m");
+    // 距離が取れたらガイドを消す
+    guide.style.display = "none";
+
   } else {
     floorDetected = false;
     document.body.dataset.floorDetected = "false";
 
     distanceLabel.textContent = "-- m";
+    // 床がまだ取れていない間はガイドを表示
+    guide.style.display = "block";
 
   }
 
