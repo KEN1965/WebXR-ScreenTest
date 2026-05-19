@@ -2,50 +2,78 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
   <title>WebXR Screen Test</title>
+
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
   <!-- WebXR描画用canvas -->
   <canvas id="xr-canvas"></canvas>
 
+  <!-- AR開始前だけ表示 -->
   <button id="start-ar">
     AR開始
   </button>
+
   <!-- バージョン表示 -->
   <div id="version-label">
-    v0.0.4.12
+    Ver4.13
   </div>
 
-<div id="ui">
+  <!-- AR開始後に表示するUI -->
+  <div id="ui">
 
-  <!-- 左上：向き + 距離 -->
-  <div id="status-panel">
-    <div id="debug-orientation">portrait</div>
-    <div id="distance-label">-- m</div>
-  </div>
+    <!-- 左上：向き + 距離 -->
+    <div id="status-panel">
+      <div id="debug-orientation">
+        portrait
+      </div>
 
-  <!-- 中央：床認識ガイド -->
-  <div id="guide">
-    スマホをゆっくり動かして床を認識させます
-  </div>
+      <div id="distance-label">
+        -- m
+      </div>
+    </div>
 
-  <!-- ボタンエリア -->
-   <div id="action-area">
-  <div id="action-buttons">
-    <button id="ai-btn">AI</button>
-    <button id="capture-btn" aria-label="撮影"></button>
-  </div>
-  </div>
+    <!-- 中央ガイド -->
+    <div id="guide">
+      スマホをゆっくり動かして<br>
+      床を認識させます
+    </div>
 
-    <div id="debug-orientation">
-      orientation
+    <!-- 下帯 / 右帯 -->
+    <div id="action-area">
+
+      <div id="action-buttons">
+
+        <!-- AIボタン -->
+        <button id="ai-btn">
+          AI
+        </button>
+
+        <!-- 撮影ボタン -->
+        <button
+          id="capture-btn"
+          aria-label="撮影"
+        ></button>
+
+      </div>
+
     </div>
 
   </div>
 
-  <script type="module" src="main.js"></script>
+  <script
+    type="module"
+    src="main.js?v=0.0.6.0"
+  ></script>
+
 </body>
 </html>

@@ -1,169 +1,108 @@
 /* =========================================
-   html / body 初期設定
+   基本設定
 ========================================= */
 
 html,
 body {
-
-  /* ブラウザの余白を消す */
   margin: 0;
   padding: 0;
-
-  /* スクロール禁止 */
   overflow: hidden;
-
-  /* 全体フォント */
   font-family: sans-serif;
-
-  /* 背景色 */
   background: black;
 }
 
 
 /* =========================================
-   WebXR描画用canvas
+   WebXR描画用 canvas
 ========================================= */
 
 #xr-canvas {
-
-  /* 画面全体に固定 */
   position: fixed;
-
-  /* top/right/bottom/left = 0 */
   inset: 0;
 
-  /* 横幅いっぱい */
   width: 100vw;
-
-  /* 高さいっぱい */
   height: 100vh;
 
-  /* 一番下のレイヤー */
   z-index: 0;
 
-  /* canvasがタップを奪わない */
   pointer-events: none;
 }
 
 
 /* =========================================
-   AR開始ボタン
+   AR開始前UI
 ========================================= */
 
 #start-ar {
-
-  /* 画面固定 */
   position: fixed;
 
-  /* 下から40px */
+  left: 50%;
   bottom: 40px;
 
-  /* 横中央 */
-  left: 50%;
-
-  /* 自分の横幅の半分戻す */
   transform: translateX(-50%);
 
-  /* 最前面 */
   z-index: 9999;
 
-  /* ボタン余白 */
   padding: 16px 24px;
 
-  /* 文字サイズ */
   font-size: 18px;
 }
 
-
-/* =========================================
-   バージョン表示
-========================================= */
-
 #version-label {
-
-  /* 画面固定 */
   position: fixed;
 
-  /* 横中央 */
   left: 50%;
-
-  /* 下から8px */
   bottom: 8px;
 
-  /* 横中央補正 */
   transform: translateX(-50%);
 
-  /* 文字色 */
-  color: white;
-
-  /* 文字サイズ */
-  font-size: 14px;
-
-  /* 前面 */
   z-index: 9999;
+
+  color: white;
+  font-size: 14px;
 }
 
 
 /* =========================================
-   AR中のUI全体
+   AR開始後UI全体
 ========================================= */
 
 #ui {
-
-  /* 画面固定 */
   position: fixed;
-
-  /* 画面全体 */
   inset: 0;
 
-  /* canvasより上 */
   z-index: 10;
 
-  /* UI全体ではタップを受けない */
   pointer-events: none;
 
-  /* AR開始前は非表示 */
   visibility: hidden;
 }
 
-
-/* =========================================
-   AR開始後にUI表示
-========================================= */
-
 body[data-ar-started="true"] #ui {
-
   visibility: visible;
 }
 
 
 /* =========================================
-   左上：orientation + 距離表示
+   左上ステータス
+   portrait / landscape
+   距離表示
 ========================================= */
 
 #status-panel {
-
-  /* 固定表示 */
   position: fixed;
 
-  /* 左上配置 */
   top: 16px;
   left: 16px;
 
-  /* 文字色 */
+  z-index: 80;
+
   color: white;
 
-  /* 文字サイズ */
   font-size: 16px;
-
-  /* 行間 */
   line-height: 1.5;
 
-  /* 背景が明るい時でも見えるように影 */
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-
-  /* 前面 */
-  z-index: 50;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9);
 }
 
 
@@ -172,98 +111,131 @@ body[data-ar-started="true"] #ui {
 ========================================= */
 
 #guide {
-
-  /* 固定表示 */
   position: fixed;
 
-  /* 横中央 */
   left: 50%;
-
-  /* 縦中央 */
   top: 50%;
 
-  /* 自分サイズ分補正 */
   transform: translate(-50%, -50%);
 
-  /* 最大横幅 */
+  z-index: 90;
+
   max-width: 280px;
 
-  /* 内側余白 */
   padding: 16px 20px;
 
-  /* 文字色 */
   color: white;
+  background: rgba(0,0,0,0.68);
 
-  /* 半透明背景 */
-  background: rgba(0,0,0,0.65);
-
-  /* 角丸 */
   border-radius: 18px;
 
-  /* 文字サイズ */
   font-size: 16px;
-
-  /* 行間 */
   line-height: 1.6;
 
-  /* 中央揃え */
   text-align: center;
-
-  /* 前面 */
-  z-index: 60;
 }
 
-
-/* =========================================
-   床認識後はガイドを消す
-========================================= */
-
+/* 床検出後はガイドを非表示 */
 body[data-floor-detected="true"] #guide {
-
   display: none;
 }
 
 
 /* =========================================
-   ボタンエリア共通
+   黒帯エリア
+   縦：下
+   横：右
 ========================================= */
 
-#action-buttons {
+#action-area {
+  position: fixed;
 
-  /* 固定表示 */
-  position: absolute;
+  z-index: 60;
 
-  /* ボタンだけタップ可能 */
-  pointer-events: auto;
+  pointer-events: none;
 
-  /* flexレイアウト */
-  display: flex;
+  background: rgba(0,0,0,0.78);
+}
 
-  /* 中央揃え */
-  align-items: center;
+/* 縦画面：下に黒帯 */
+body[data-screen-orientation="portrait"] #action-area {
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-  /* ボタン間隔 */
-  gap: 18px;
+  height: 142px;
 
-  /* 前面 */
-  z-index: 50;
+  border-top: 2px solid rgba(255,255,255,0.85);
+}
+
+/* 横画面：右に黒帯 */
+body[data-screen-orientation="landscape"] #action-area {
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 132px;
+
+  border-left: 2px solid rgba(255,255,255,0.85);
 }
 
 
 /* =========================================
-   AIボタン・撮影ボタン共通
+   ボタン配置エリア
+========================================= */
+
+#action-buttons {
+  position: absolute;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+
+  pointer-events: auto;
+}
+
+/* 縦：黒帯の中央に横並び */
+body[data-screen-orientation="portrait"] #action-buttons {
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  flex-direction: row;
+}
+
+/* 横：右黒帯の中央に縦並び */
+body[data-screen-orientation="landscape"] #action-buttons {
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  flex-direction: column;
+}
+
+
+/* =========================================
+   ボタン共通
 ========================================= */
 
 #ai-btn,
 #capture-btn {
+  display: block;
 
-  width: 78px;
-  height: 78px;
+  box-sizing: border-box;
+
+  padding: 0;
+  margin: 0;
 
   border-radius: 50%;
-  background:white;
-  border: 6px solid rgba(0,0,0,0.35);
-  box-shadow: 0 0 12px rgba(255,255,255,0.35);
+
+  pointer-events: auto;
+
+  flex: 0 0 auto;
 }
 
 
@@ -272,16 +244,14 @@ body[data-floor-detected="true"] #guide {
 ========================================= */
 
 #capture-btn {
+  width: 76px;
+  height: 76px;
 
-  /* サイズ */
-  width: 72px;
-  height: 72px;
-
-  /* 白色 */
   background: white;
 
-  /* 外枠 */
-  border: 4px solid rgba(0,0,0,0.35);
+  border: 6px solid rgba(0,0,0,0.35);
+
+  box-shadow: 0 0 12px rgba(255,255,255,0.35);
 }
 
 
@@ -290,119 +260,37 @@ body[data-floor-detected="true"] #guide {
 ========================================= */
 
 #ai-btn {
-
-  /* サイズ */
   width: 58px;
   height: 58px;
 
-  border-radius: 505;
-  border:none;
-  background: #63e66c;
-  color:black;
+  background: #5fe36f;
+  color: black;
+
+  border: none;
+
   font-size: 18px;
   font-weight: bold;
 }
-/* =========================================
-   ボタン背景帯
-========================================= */
-
-#action-area {
-
-  position: fixed;
-
-  z-index: 40;
-
-  pointer-events: none;
-
-  background: rgba(0,0,0,0.72);
-
-  backdrop-filter: blur(8px);
-}
-
-/* =========================================
-   縦画面：下帯
-========================================= */
-
-body[data-screen-orientation="portrait"] #action-area {
-
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  height: 140px;
-
-  /* 上側白ライン */
-  border-top: 1px solid rgba(255,255,255,0.75);
-}
-/* =========================================
-   横画面：右帯
-========================================= */
-
-body[data-screen-orientation="landscape"] #action-area {
-
-  top: 0;
-  right: 0;
-  bottom: 0;
-
-  width: 120px;
-
-  /* 左白ライン */
-  border-left: 1px solid rgba(255,255,255,0.75);
-}
-
-/* =========================================
-   縦画面UI
-========================================= */
-
-body[data-screen-orientation="portrait"] #action-buttons {
-
-  /* 横中央 */
-  left: 50%;
-
-  /* 下配置 */
-  bottom: 32px;
-
-  /* 横中央補正 */
-  transform: translateX(-50%);
-
-  /* 横並び */
-  flex-direction: row;
-}
 
 
 /* =========================================
-   横画面UI
+   ボタン順番
 ========================================= */
 
-body[data-screen-orientation="landscape"] #action-buttons {
-  left: 50%;
-
-  /* 縦中央 */
-  top: 50%;
-
-  /* 縦中央補正 */
-  transform: translateY(-50%, -50%);
-
-  flex-direction: column;
-}
-
-
-/* =========================================
-   横画面時のボタン順番
-========================================= */
-
-/* 撮影ボタンを上 */
-body[data-screen-orientation="landscape"] #capture-btn {
-
+/* 縦：AI → 撮影 */
+body[data-screen-orientation="portrait"] #ai-btn {
   order: 1;
 }
 
-/* AIボタンを下 */
-body[data-screen-orientation="landscape"] #ai-btn {
-
+body[data-screen-orientation="portrait"] #capture-btn {
   order: 2;
 }
 
+/* 横：撮影 → AI */
+body[data-screen-orientation="landscape"] #capture-btn {
+  order: 1;
+}
+
 body[data-screen-orientation="landscape"] #ai-btn {
-  transform: rotate(90deg);
+  order: 2;
 }
