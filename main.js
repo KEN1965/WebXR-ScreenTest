@@ -130,9 +130,14 @@ startButton.addEventListener("click", async () => {
       viewerSpace = await session.requestReferenceSpace("viewer");
 
       // スマホ中心から前方に向けてhit-testする
+      try {
       hitTestSource = await session.requestHitTestSource({
         space: viewerSpace,
       });
+    } catch (error) {
+      console.warn("hit-test source作成失敗", error);
+      distanceLabel.textContent = "hit-test未使用";
+    }
 
     //AR開始後に向きを再判定
     updateOrientationByScreenSize();
@@ -140,7 +145,7 @@ startButton.addEventListener("click", async () => {
       // AR開始後の状態にする
     document.body.dataset.arStarted = "true";
     document.body.dataset.floorDetected = "false";
-    
+
     // AR開始ボタンを非表示にする
     startButton.style.display = "none";
     versionLabel.style.display = "none";
