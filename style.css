@@ -177,18 +177,18 @@ body[data-screen-orientation="portrait"] #action-area {
 
 
 /* =========================================
-   横画面：右帯
-   ※ flex/order は使わない
+   横画面：実機で右側に見える帯
+   Android Chrome WebXRでは bottom が実機右側に見える
 ========================================= */
 
 body[data-screen-orientation="landscape"] #action-area {
-  top: 0;
+  left: 0;
   right: 0;
   bottom: 0;
 
-  width: 132px;
+  height: 132px;
 
-  border-left: 2px solid rgba(255,255,255,0.85);
+  border-top: 2px solid rgba(255,255,255,0.85);
 }
 
 
@@ -282,43 +282,46 @@ body[data-screen-orientation="portrait"] #capture-btn {
    撮影中央 / AI下
 ========================================= */
 
+/* 横画面：ボタン配置 */
 body[data-screen-orientation="landscape"] #action-buttons {
   position: absolute;
 
-  left: 0;
-  top: 0;
-
-  width: 132px;
-  height: 100%;
-
-  transform: none;
-}
-
-/* 撮影ボタン：右帯の中央 */
-body[data-screen-orientation="landscape"] #capture-btn {
   left: 50%;
   top: 50%;
 
+  width: 210px;
+  height: 90px;
+
   transform: translate(-50%, -50%);
 }
 
-/* AIボタン：撮影ボタンの下 */
+/* 横画面：撮影ボタン */
+body[data-screen-orientation="landscape"] #capture-btn {
+  position: absolute;
+
+  left: 0;
+  top: 50%;
+
+  transform: translateY(-50%);
+}
+/* 横画面：AIボタン */
 body[data-screen-orientation="landscape"] #ai-btn {
-  left: 50%;
-  top: calc(50% + 96px);
+  position: absolute;
 
-  transform: translate(-50%, -50%);
+  right: 0;
+  top: 50%;
+
+  transform: translateY(-50%) rotate(90deg);
 }
 
-
-/* =========================================
-   横画面：ステータス位置
-   左上固定
-========================================= */
-
+/* 横画面：ステータスを実機左上に見える位置へ */
 body[data-screen-orientation="landscape"] #status-panel {
-  top: 16px;
-  left: 16px;
+  position: fixed;
 
-  transform: none;
+  top: 16px;
+  right: 16px;
+  left: auto;
+
+  transform: rotate(90deg);
+  transform-origin: top right;
 }
