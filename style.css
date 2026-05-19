@@ -11,41 +11,36 @@ body {
 #start-ar {
   position: fixed;
   z-index: 9999;
-
   bottom: 40px;
   left: 50%;
-
   transform: translateX(-50%);
 
   padding: 16px 24px;
   font-size: 18px;
-
   pointer-events: auto;
 }
 /* バージョン表示 */
 #version-label {
   position: fixed;
-
   bottom: 8px;
   left: 50%;
-
   transform: translateX(-50%);
-
+  z-index: 9999;
   color: white;
   font-size: 14px;
-
-  z-index: 100;
 }
 
 /* WebXR UI全体 */
 #ui {
   position: fixed;
   inset: 0;
-
   pointer-events: none;
   z-index: 10;
-
   visibility: hidden;
+}
+/* AR開始後だけUIを表示 */
+body[data-ar-started="true"] #ui {
+    visibility: visible;
 }
 
 /* ボタン共通 */
@@ -60,26 +55,7 @@ body {
 
   background: white;
 }
-/*床を認識して下さい。のガイド */
-#guide {
-  position: fixed;
 
-  left: 50%;
-  top: 50%;
-
-  transform: translate(-50%, -50%);
-
-  color: white;
-  background: rgba(0,0,0,0.6);
-
-  padding: 16px 20px;
-  border-radius: 16px;
-
-  font-size: 16px;
-  text-align: center;
-
-  z-index: 30;
-}
 #distance-label {
   position: fixed;
 
@@ -94,9 +70,75 @@ body {
 
   z-index: 999;
 }
+/*床を認識して下さい。のガイド */
+#guide {
+  position: fixed;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  max-width:280px;
+  padding: 16px 20px;
+
+  color: white;
+  background: rgba(0,0,0,0.65);
+
+  padding: 16px 20px;
+  border-radius: 18px;
+
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+
+  z-index: 30;
+}
+/* 左上：orientation + distance */
+#status-panel {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  color: white;
+  font-size: 16px;
+  line-height: 1.5;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
 /* 床を検出したらガイドを消す */
 body[data-floor-detected="true"] #guide {
   display: none;
+}
+
+/* ボタン共通 */
+#action-buttons {
+  position: fixed;
+  pointer-events: auto;
+  display: flex;
+  gap: 18px;
+}
+
+#capture-btn,
+#ai-btn {
+  border: none;
+  border-radius: 50%;
+  pointer-events: auto;
+}
+
+#capture-btn {
+  width: 72px;
+  height: 72px;
+  background: white;
+  border: 4px solid rgba(0,0,0,0.35);
+}
+
+#ai-btn {
+  width: 56px;
+  height: 56px;
+  background: #45d66b;
+  color: black;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 /* デバッグ表示 */
@@ -122,34 +164,34 @@ body[data-ar-started="true"] #guide {
 body[data-ar-started="true"] #distance-label {
   display: block;
 }
-/* AR開始後だけUIを表示 */
-body[data-ar-started="true"] #ui {
-    visibility: visible;
-}
+
 body[data-ar-started="true"] #xr-canvas {
   display: block;
 }
-/* portrait:撮影ボタンを画面中央下部に配置 */
-body[data-screen-orientation="portrait"] #capture-btn {
-  position: fixed;
-
+/* 縦：中央下部にAIボタンと撮影ボタン */
+body[data-screen-orientation="portrait"] #action-buttons{
   left: 50%;
-  bottom: 40px;
+  bottom: 32px;
 
   transform: translateX(-50%);
 
-  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+  gap: 18px;
+
 }
-/* landscape ：縦画面と同じ位置に置き、文字を横向きに補正*/
-body[data-screen-orientation="landscape"] #capture-btn {
- position: fixed;
+/* 横：右側に撮影、その下にAI */
+body[data-screen-orientation="landscape"] #action-buttons {
+  right: 28px;
+  top: 50%;
 
-  left: 50%;
-  bottom: 40px;
+  transform: translateY(-50%);
 
-  transform: translateX(-50%) rotate(90deg);
-
-  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
 }
 
 body[data-screen-orientation="landscape"] #debug-orientation {
@@ -158,6 +200,11 @@ body[data-screen-orientation="landscape"] #debug-orientation {
 
   transform: translateY(-50%) rotate(90deg);
 }
+/* 横画面時、DOM Overlayが縦基準になる場合の文字補正 */
+body[data-screen-orientation="landscape"] #ai-btn {
+  transform: rotate(90deg);
+}
+
 /* WebXR描画用canvas */
 #xr-canvas {
   position: fixed;

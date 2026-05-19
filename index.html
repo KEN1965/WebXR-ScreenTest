@@ -16,29 +16,29 @@
   </button>
   <!-- バージョン表示 -->
   <div id="version-label">
-    v0.0.4.9
+    v0.0.4.10
   </div>
 
-  <div id="ui">
+<div id="ui">
 
-  <button id="capture-btn">
-    撮影
-  </button>
+  <!-- 左上：向き + 距離 -->
+  <div id="status-panel">
+    <div id="debug-orientation">portrait</div>
+    <div id="distance-label">-- m</div>
+  </div>
 
+  <!-- 中央：床認識ガイド -->
   <div id="guide">
-    スマホをゆっくり動かして床を認識してください
+    スマホをゆっくり動かして床を認識させます
   </div>
 
-  <div id="distance-label">
-    -- m
+  <!-- ボタンエリア -->
+  <div id="action-buttons">
+    <button id="ai-btn">AI</button>
+    <button id="capture-btn" aria-label="撮影"></button>
   </div>
 
-  <div id="debug-orientation">
-    orientation
-  </div>
-
-  </div>
-  
+</div>
 
     <div id="debug-orientation">
       orientation
