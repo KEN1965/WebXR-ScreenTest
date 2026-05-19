@@ -206,14 +206,18 @@ body[data-screen-orientation="landscape"] #action-area {
   border-top: 2px solid rgba(255,255,255,0.85);
 }
 
-/* 横画面：帯の中にボタンを配置 */
+/* 横画面：右帯の中を配置基準にする */
 body[data-screen-orientation="landscape"] #action-buttons {
-  left: 50%;
-  top: 50%;
+  position: absolute;
 
-  transform: translate(-50%, -50%);
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
 
-  flex-direction: column-reverse;
+  transform: none;
+
+  display: block;
 }
 /* =========================================
    横画面：実機では右側に見える帯
@@ -249,6 +253,25 @@ body[data-screen-orientation="landscape"] #action-buttons {
 /* =========================================
    横画面：ボタン順番
 ========================================= */
+
+/* 横画面：撮影ボタンを右帯の中央に固定 */
+body[data-screen-orientation="landscape"] #capture-btn {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+}
+/* 横画面：AIボタンを撮影ボタンの下に固定 */
+body[data-screen-orientation="landscape"] #ai-btn {
+  position: absolute;
+
+  left: 50%;
+  top: calc(50% + 96px);
+
+  transform: translate(-50%, -50%);
+}
 
 /* 撮影ボタンを左 */
 body[data-screen-orientation="landscape"] #capture-btn {
@@ -358,14 +381,5 @@ body[data-screen-orientation="portrait"] #ai-btn {
 }
 
 body[data-screen-orientation="portrait"] #capture-btn {
-  order: 2;
-}
-
-/* 横：撮影 → AI */
-body[data-screen-orientation="landscape"] #capture-btn {
-  order: 1;
-}
-
-body[data-screen-orientation="landscape"] #ai-btn {
   order: 2;
 }
