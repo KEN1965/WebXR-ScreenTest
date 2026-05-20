@@ -10,7 +10,7 @@
 
   <title>WebXR Screen Test</title>
 
-  <link rel="stylesheet" href="style.css?v0.0.4.21" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -25,64 +25,54 @@
 
   <!-- バージョン表示 -->
   <div id="version-label">
-    v0.0.4.21
+    Ver4.15
   </div>
 
   <!-- AR開始後に表示するUI -->
-<div id="ui">
+  <div id="ui">
 
-  <!-- =========================
-       縦画面専用UI
-  ========================== -->
-  <div id="portrait-ui">
+    <!-- 左上：向き + 距離 -->
+    <div id="status-panel">
+      <div id="debug-orientation">
+        portrait
+      </div>
 
-    <div class="status-panel">
-      <div class="orientation-label">portrait</div>
-      <div class="distance-label">-- m</div>
-    </div>
-
-    <div class="guide">
-      スマホをゆっくり動かして<br>
-      床を認識させます
-    </div>
-
-    <div class="portrait-action-area">
-      <div class="portrait-buttons">
-        <button class="ai-btn">AI</button>
-        <button class="capture-btn" aria-label="撮影"></button>
+      <div id="distance-label">
+        -- m
       </div>
     </div>
 
-  </div>
-
-
-  <!-- =========================
-       横画面専用UI
-  ========================== -->
-  <div id="landscape-ui">
-
-    <div class="status-panel">
-      <div class="orientation-label">landscape</div>
-      <div class="distance-label">-- m</div>
-    </div>
-
-    <div class="guide">
+    <!-- 中央ガイド -->
+    <div id="guide">
       スマホをゆっくり動かして<br>
       床を認識させます
     </div>
 
-    <div class="landscape-action-area">
-      <button class="capture-btn" aria-label="撮影"></button>
-      <button class="ai-btn">AI</button>
+    <!-- 下帯 / 右帯 -->
+    <div id="action-area">
+
+      <div id="action-buttons">
+
+        <!-- AIボタン -->
+        <button id="ai-btn">
+          AI
+        </button>
+
+        <!-- 撮影ボタン -->
+        <button
+          id="capture-btn"
+          aria-label="撮影"
+        ></button>
+
+      </div>
+
     </div>
 
   </div>
 
-</div>
-
   <script
     type="module"
-    src="main.js?v0.0.4.21"
+    src="main.js?v=0.0.6.0"
   ></script>
 
 </body>
