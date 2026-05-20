@@ -195,16 +195,6 @@ body[data-screen-orientation="portrait"] #action-buttons {
 
   flex-direction: row;
 }
-/* 横画面：実機では右側に見える帯 */
-/* body[data-screen-orientation="landscape"] #action-area {
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  height: 132px;
-
-  border-top: 2px solid rgba(255,255,255,0.85);
-} */
 
 /* 横画面：帯の中にボタンを配置 */
 body[data-screen-orientation="landscape"] #action-buttons {
@@ -371,4 +361,33 @@ body[data-screen-orientation="landscape"] #capture-btn {
 
 body[data-screen-orientation="landscape"] #ai-btn {
   order: 2;
+}
+body[data-screen-orientation="landscape"] #action-area {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: auto !important;
+
+  width: 142px !important;
+  height: auto !important;
+
+  border-top: none !important;
+  border-left: 2px solid rgba(255,255,255,0.85) !important;
+}
+
+body[data-screen-orientation="landscape"] #action-buttons {
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  flex-direction: column !important;
+}
+
+body[data-screen-orientation="landscape"] #capture-btn {
+  order: 1 !important;
+}
+
+body[data-screen-orientation="landscape"] #ai-btn {
+  order: 2 !important;
+  transform: none !important;
 }
