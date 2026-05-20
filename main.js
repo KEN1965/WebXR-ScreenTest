@@ -75,7 +75,16 @@ function setScreenOrientation(orientation) {
   // 左上表示更新
   orientationLabel.textContent = orientation;
 
-  console.log("orientation:", orientation);
+   console.log(
+    "orientation:",
+    orientation,
+    "body:",
+    document.body.dataset.screenOrientation,
+    "w:",
+    window.innerWidth,
+    "h:",
+    window.innerHeight
+  );
 }
 
 
@@ -85,10 +94,7 @@ function setScreenOrientation(orientation) {
 
 function updateOrientationByScreenSize() {
 
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  const isLandscape = width > height;
+  const isLandscape = window.matchMedia("(orientation: landscape"),matches;
 
   setScreenOrientation(
     isLandscape ? "landscape" : "portrait"
@@ -129,13 +135,16 @@ window.addEventListener(
   "resize",
   updateOrientationByScreenSize
 );
-
-// スマホ傾き変化
+// 画面サイズ変化
 window.addEventListener(
-  "deviceorientation",
-  handleDeviceOrientation
+  "orientationchange",
+  updateOrientationByScreenSize
 );
 
+screen.orientation?.addEventListener(
+  "change",
+  updateOrientationByScreenSize
+);
 
 // =========================================
 // AR開始ボタン
